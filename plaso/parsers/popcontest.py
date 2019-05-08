@@ -171,6 +171,7 @@ class PopularityContestParser(text_parser.PyparsingSingleLineTextParser):
       text_parser.PyparsingConstants.INTEGER.setResultsName('atime') +
       text_parser.PyparsingConstants.INTEGER.setResultsName('ctime') +
       (PACKAGE + TAG | PACKAGE + MRU + pyparsing.Optional(TAG)))
+  LOG_LINE.addParseAction(text_parser.PyParseInsertDefaultNone('tag'))
 
   LINE_STRUCTURES = [
       ('logline', LOG_LINE),

@@ -19,6 +19,7 @@ from plaso.lib import py2to3
 from plaso.parsers import interface
 from plaso.parsers import logger
 
+_COLON, _LBRACK, _RBRACK, _LT, _GT, _DASH = map(pyparsing.Suppress, ":[]<>-")
 
 # Pylint complains about some functions not being implemented that shouldn't
 # be since they need to be implemented by children.
@@ -182,16 +183,16 @@ class PyparsingConstants(object):
   THREE_LETTERS = pyparsing.Word(pyparsing.alphas, exact=3)
 
   DATE_ELEMENTS = (
-      FOUR_DIGITS.setResultsName('year') + pyparsing.Suppress('-') +
-      TWO_DIGITS.setResultsName('month') + pyparsing.Suppress('-') +
-      TWO_DIGITS.setResultsName('day_of_month'))
+      FOUR_DIGITS('year') + _DASH +
+      TWO_DIGITS('month') + _DASH +
+      TWO_DIGITS('day_of_month'))
   TIME_ELEMENTS = (
-      TWO_DIGITS.setResultsName('hours') + pyparsing.Suppress(':') +
-      TWO_DIGITS.setResultsName('minutes') + pyparsing.Suppress(':') +
-      TWO_DIGITS.setResultsName('seconds'))
+      TWO_DIGITS('hours') + _COLON +
+      TWO_DIGITS('minutes') + _COLON +
+      TWO_DIGITS('seconds'))
   TIME_MSEC_ELEMENTS = (
       TIME_ELEMENTS + pyparsing.Word('.,', exact=1).suppress() +
-      INTEGER.setResultsName('microseconds'))
+      INTEGER('microseconds'))
 
   # Date structures defined as a single group.
   DATE = pyparsing.Group(DATE_ELEMENTS)
@@ -208,6 +209,18 @@ class PyparsingConstants(object):
   # TODO: Add more commonly used structs that can be used by parsers.
   PID = pyparsing.Word(
       pyparsing.nums, min=1, max=5).setParseAction(PyParseIntCast)
+
+
+def PyParseInsertDefaultNone(key):
+  """
+  Factory function to create a parse action that will insert 'None' results 
+  values if the given key is not present in the parsed tokens
+  """
+  def _inner(string, location, tokens):
+    if key not in tokens:
+      tokens[key] = None
+  _inner.__name__ = 'AddDefaultNoneFor' + key.title()
+  return _inner
 
 
 class PyparsingSingleLineTextParser(interface.FileObjectParser):

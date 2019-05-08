@@ -90,6 +90,7 @@ class SSHSyslogPlugin(interface.SyslogPlugin):
           pyparsing.Literal(':') + _PYPARSING_COMPONENTS['fingerprint']) +
       pyparsing.StringEnd()
   )
+  _LOGIN_GRAMMAR.addParseAction(text_parser.PyParseInsertDefaultNone('fingerprint'))
 
   _FAILED_CONNECTION_GRAMMAR = (
       pyparsing.Literal('Failed') +

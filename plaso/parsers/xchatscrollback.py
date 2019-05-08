@@ -99,6 +99,8 @@ class XChatScrollbackParser(text_parser.PyparsingSingleLineTextParser):
   MSG_ENTRY_TEXT = pyparsing.SkipTo(pyparsing.LineEnd()).setResultsName('text')
   MSG_ENTRY = MSG_ENTRY_NICK + MSG_ENTRY_TEXT
   MSG_ENTRY.parseWithTabs()
+  MSG_ENTRY.addParseAction(text_parser.PyParseInsertDefaultNone('nickname'),
+                           text_parser.PyParseInsertDefaultNone('text'))
 
   def __init__(self):
     """Initializes a parser."""

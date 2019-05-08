@@ -80,6 +80,8 @@ class MacOSSecuritydLogParser(text_parser.PyparsingSingleLineTextParser):
       pyparsing.Optional(pyparsing.CharsNotIn(']:').setResultsName(
           'caller')) + pyparsing.Literal(']:').suppress() +
       pyparsing.SkipTo(pyparsing.lineEnd).setResultsName('message'))
+  SECURITYD_LINE.addParseAction(text_parser.PyParseInsertDefaultNone('security_api'),
+                                text_parser.PyParseInsertDefaultNone('caller'))
 
   REPEATED_LINE = (
       DATE_TIME.setResultsName('date_time') +

@@ -243,6 +243,10 @@ class SantaParser(text_parser.PyparsingSingleLineTextParser):
       _PYPARSING_COMPONENTS['mode'] +
       _PYPARSING_COMPONENTS['path'] +
       pyparsing.Optional(_PYPARSING_COMPONENTS['args']))
+  _EXECUTION_LINE.addParseAction(text_parser.PyParseInsertDefaultNone('cert_sha256'),
+                                 text_parser.PyParseInsertDefaultNone('cert_cn'),
+                                 text_parser.PyParseInsertDefaultNone('quarantine_url'),
+                                 text_parser.PyParseInsertDefaultNone('args'))
 
   _FILE_OPERATION_LINE = (
       _PYPARSING_COMPONENTS['date'].setResultsName('date') +

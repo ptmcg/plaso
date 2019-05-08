@@ -184,6 +184,10 @@ class SyslogParser(text_parser.PyparsingMultiLineTextParser):
       pyparsing.Optional(pyparsing.Suppress(':')) +
       _PYPARSING_COMPONENTS['body'] + pyparsing.lineEnd())
 
+  _SYSLOG_LINE.addParseAction(text_parser.PyParseInsertDefaultNone('pid'),
+                              text_parser.PyParseInsertDefaultNone('facility'),
+                              text_parser.PyParseInsertDefaultNone('body'))
+
   _SYSLOG_COMMENT = (
       _PYPARSING_COMPONENTS['date'] + pyparsing.Suppress(':') +
       pyparsing.Suppress('---') + _PYPARSING_COMPONENTS['comment_body'] +

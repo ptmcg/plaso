@@ -138,7 +138,7 @@ class XChatLogParser(text_parser.PyparsingSingleLineTextParser):
       _DATE_TIME.setResultsName('date_time') +
       pyparsing.Optional(_NICKNAME) +
       pyparsing.SkipTo(pyparsing.lineEnd).setResultsName('text'))
-
+  _LOG_LINE.addParseAction(text_parser.PyParseInsertDefaultNone('nickname'))
   LINE_STRUCTURES = [
       ('logline', _LOG_LINE),
       ('header', _HEADER),
